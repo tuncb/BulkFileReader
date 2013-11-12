@@ -6,7 +6,6 @@
 #include <string>
 #include <fstream>
 #include <exception>
-#include <limits>
 
 #include <sys\stat.h>
 
@@ -58,12 +57,8 @@ template <typename T> std::unique_ptr<T[]> bulk_read_file(const T* filename) {
     std::unique_ptr<T[]> input;
 
     auto file_size = ozp::detail_bfr::get_filesize(filename);
-    if (file_size * sizeof(T) > std::numeric_limits<size_t>::max())
-        throw std::runtime_error("File too big to fit in memory!");
-
     std::basic_ifstream<T, std::char_traits<T> > file(
         filename, std::ios::in | std::ios::binary | std::ios::ate);
-
     if (!file.is_open())
         throw std::runtime_error("Could not open file!");
 
