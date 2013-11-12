@@ -29,20 +29,20 @@ template <typename T> T provide_null() {
     return null_provider();
 }
 
-__int64 inline get_filesize(const char* filename) {
-    struct __stat64 fileStat;
-    int err = _stat64(filename, &fileStat);
-    if (err != 0)
-        throw std::runtime_error("File not found!");
-    return fileStat.st_size;
+int get_filestat(const char* filename, struct __stat64& stat) {
+    return _stat64(filename, &stat);
 }
 
-__int64 inline get_filesize(const wchar_t* filename) {
-    struct __stat64 fileStat;
-    int err = _wstat64(filename, &fileStat);
+int get_filestat(const wchar_t* filename, struct __stat64& stat) {
+    return _wstat64(filename, &stat);
+}
+
+template <typename T> __int64 inline get_filesize(const T* filename) {
+    struct __stat64 stat;
+    int err = get_filestat(filename, stat);
     if (err != 0)
         throw std::runtime_error("File not found!");
-    return fileStat.st_size;
+    return stat.st_size;
 }
 }
 
