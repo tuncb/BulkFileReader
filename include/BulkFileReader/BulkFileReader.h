@@ -44,6 +44,16 @@ template <typename T> __int64 inline get_filesize(const T* filename) {
 }
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// <summary>   Bulk reads text files into char or wchar_t arrays. </summary>
+///
+/// <exception cref="std::runtime_error">   Thrown when file is not found, or cannot be opened, etc... </exception>
+///
+/// <typeparam name="typename T"> char or wchar_t </typeparam>
+/// <param name="filename"> Filename of the file. </param>
+///
+/// <returns>   Array of null terminated characters; </returns>
+////////////////////////////////////////////////////////////////////////////////////////////////////
 template <typename T> std::unique_ptr<T[]> bulk_read_file(const T* filename) {
     std::unique_ptr<T[]> input;
 
