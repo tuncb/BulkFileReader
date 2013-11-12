@@ -6,6 +6,13 @@ C++ library for reading text files into null terminated character arrays.
 * Reads files in a single go.
 * Throws std::runtime_error in case of errors.
 
+Installation
+-----------
+Header only -> 
+~~~~cpp
+#include <include/BulkFileReader/BulkFileReader.h>
+~~~~
+
 Function definition
 ----------
 ~~~~cpp
