@@ -13,7 +13,10 @@
 namespace ozp {
 
 namespace detail_bfr {
-template <typename T> struct NullChar {};
+template <typename T> struct NullChar {
+    static_assert<false>,
+        "BulkFileReader: only char and wchar_t are accepted types."
+};
 template <> struct NullChar<char> {
     char operator()() { return '\0'; }
 };
@@ -41,7 +44,6 @@ __int64 inline get_filesize(const wchar_t* filename) {
         throw std::runtime_error("File not found!");
     return fileStat.st_size;
 }
-
 }
 
 template <typename T>
@@ -56,6 +58,9 @@ std::unique_ptr<T[]> bulk_read_file(const T* filename,
     std::basic_ifstream<T, std::char_traits<T> > file(
         filename, std::ios::in | std::ios::binary | std::ios::ate);
 
+    if (!file.is_open())
+        throw std::runtime_error("Could not open file!");
+
     if (null_terminated) {
         input.reset(new T[static_cast<size_t>(file_size + 1)]);
         file.seekg(0, std::ios::beg);
@@ -67,7 +72,6 @@ std::unique_ptr<T[]> bulk_read_file(const T* filename,
         file.read(input.get(), file_size);
     }
 
-    file.close();
     return input;
 }
 }
