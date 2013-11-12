@@ -13,10 +13,8 @@
 namespace ozp {
 
 namespace detail_bfr {
-template <typename T> struct NullChar {
-    static_assert<false>,
-        "BulkFileReader: only char and wchar_t are accepted types."
-};
+
+template <typename T> struct NullChar {};
 template <> struct NullChar<char> {
     char operator()() { return '\0'; }
 };
@@ -46,9 +44,7 @@ template <typename T> __int64 inline get_filesize(const T* filename) {
 }
 }
 
-template <typename T>
-std::unique_ptr<T[]> bulk_read_file(const T* filename,
-                                    bool null_terminated = true) {
+template <typename T> std::unique_ptr<T[]> bulk_read_file(const T* filename) {
     std::unique_ptr<T[]> input;
 
     auto file_size = ozp::detail_bfr::get_filesize(filename);
@@ -61,16 +57,10 @@ std::unique_ptr<T[]> bulk_read_file(const T* filename,
     if (!file.is_open())
         throw std::runtime_error("Could not open file!");
 
-    if (null_terminated) {
-        input.reset(new T[static_cast<size_t>(file_size + 1)]);
-        file.seekg(0, std::ios::beg);
-        file.read(input.get(), file_size);
-        input[file_size] = ozp::detail_bfr::provide_null<T>();
-    } else {
-        input.reset(new T[static_cast<size_t>(file_size)]);
-        file.seekg(0, std::ios::beg);
-        file.read(input.get(), file_size);
-    }
+    input.reset(new T[static_cast<size_t>(file_size + 1)]);
+    file.seekg(0, std::ios::beg);
+    file.read(input.get(), file_size);
+    input[file_size] = ozp::detail_bfr::provide_null<T>();
 
     return input;
 }
