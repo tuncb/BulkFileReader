@@ -10,7 +10,7 @@ Installation
 -----------
 Header only -> 
 ~~~~cpp
-#include <include/BulkFileReader/BulkFileReader.h>
+#include <BulkFileReader/BulkFileReader.h>
 ~~~~
 
 Function definition
