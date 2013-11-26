@@ -214,3 +214,5 @@ testCaseCollection.xml
 
 #Mr Developer
 .mr.developer.cfg
+*.nupkg
+
